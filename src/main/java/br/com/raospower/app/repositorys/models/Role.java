@@ -1,5 +1,7 @@
 package br.com.raospower.app.repositorys.models;
 
+import br.com.raospower.app.services.dto.RoleDTO;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,6 +23,14 @@ public class Role implements Serializable {
             joinColumns = @JoinColumn(name ="role_id"),
             inverseJoinColumns = @JoinColumn(name ="permission_id"))
     private List<Permission> permissionList = new ArrayList<>();
+
+    public Role() {
+    }
+
+    public Role(RoleDTO roleDTO) {
+        this.id = roleDTO.getId();
+        this.name = roleDTO.getName();
+    }
 
     public Long getId() {
         return id;

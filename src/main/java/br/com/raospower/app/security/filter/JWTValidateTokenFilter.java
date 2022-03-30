@@ -39,7 +39,6 @@ public class JWTValidateTokenFilter extends BasicAuthenticationFilter {
             String attribute = request.getHeader(HEADER_ATTRIBUTE);
             if (attribute == null) {
                 chain.doFilter(request, response);
-                // onUnsuccessfulAuthentication(request, response, new AuthenticationServiceException("Token não informado."));
                 return;
             }
             if (!attribute.startsWith(ATTRIBUTE_PREFIX)) {
@@ -55,7 +54,6 @@ public class JWTValidateTokenFilter extends BasicAuthenticationFilter {
             super.doFilterInternal(request, response, chain);
         } catch (JWTVerificationException e) {
             onUnsuccessfulAuthentication(request, response, new AuthenticationServiceException(e.getMessage(), e));
-            return;
         }
     }
 
@@ -65,9 +63,7 @@ public class JWTValidateTokenFilter extends BasicAuthenticationFilter {
             String username = decode.getSubject();
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
             return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-        } catch (JWTVerificationException e) {
-            throw e;
-        } catch (IllegalArgumentException e) {
+        } catch (JWTVerificationException | IllegalArgumentException e) {
             throw e;
         }
     }

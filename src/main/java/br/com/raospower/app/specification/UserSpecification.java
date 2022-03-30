@@ -1,6 +1,7 @@
 package br.com.raospower.app.specification;
 
 import br.com.raospower.app.repositorys.models.User;
+import br.com.raospower.app.services.dto.UserDTO;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -11,9 +12,9 @@ import java.util.Locale;
 
 public class UserSpecification implements Specification<User> {
 
-    private User user;
+    private UserDTO user;
 
-    public UserSpecification(User user) {
+    public UserSpecification(UserDTO user) {
         this.user = user;
     }
 
@@ -27,11 +28,11 @@ public class UserSpecification implements Specification<User> {
         return predicate;
     }
 
-    public User getUser() {
+    public UserDTO getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDTO user) {
         this.user = user;
     }
 }

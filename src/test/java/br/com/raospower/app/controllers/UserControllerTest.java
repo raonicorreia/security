@@ -6,6 +6,8 @@ import br.com.raospower.app.exceptions.UserNotInformedException;
 import br.com.raospower.app.repositorys.models.Role;
 import br.com.raospower.app.repositorys.models.User;
 import br.com.raospower.app.services.UserService;
+import br.com.raospower.app.services.dto.RoleDTO;
+import br.com.raospower.app.services.dto.UserDTO;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +29,7 @@ class UserControllerTest {
 
     @Test
     void insertUsuario() throws UserAlreadyExistsException {
-        User usuario = null;
+        UserDTO usuario = null;
         try {
             usuario = usuarioService.getUserByUsername("raoni");
             if (usuario != null) {
@@ -40,12 +42,12 @@ class UserControllerTest {
             }
         } catch (UserNotFoundException e) {
             if (usuario == null) {
-                usuario = new User();
+                usuario = new UserDTO();
                 usuario.setName("Raoni");
                 usuario.setEmail("raoni@raoni.com");
                 usuario.setPassword("$2a$10$AClqa6pS99KTaT2QpbYdvuVP1yf3QOSBeHvzdjaphp5A3GY91yvEO");
                 usuario.setUsername("raoni");
-                Role prf = new Role();
+                RoleDTO prf = new RoleDTO();
                 prf.setName("ROLE_USER");
                 prf.setId(2L);
                 usuario.getRoles().add(prf);
@@ -63,8 +65,8 @@ class UserControllerTest {
             usuario = usuarioService.getUserByUsername("raoni");
             if (usuario != null) {
                 LOGGER.info(usuario.toString());
-                List<Role> perfis = usuario.getRoles();
-                for (Role perfil: perfis) {
+                List<RoleDTO> perfis = usuario.getRoles();
+                for (RoleDTO perfil: perfis) {
                     LOGGER.info(perfil.toString());
                 }
             }
@@ -76,7 +78,7 @@ class UserControllerTest {
 
     @Test
     void insertAdmin() throws UserAlreadyExistsException {
-        User usuario = null;
+        UserDTO usuario = null;
         try {
             usuario = usuarioService.getUserByUsername("admin");
             if (usuario != null) {
@@ -89,12 +91,12 @@ class UserControllerTest {
             }
         } catch (UserNotFoundException e) {
             if (usuario == null) {
-                usuario = new User();
+                usuario = new UserDTO();
                 usuario.setName("admin");
                 usuario.setEmail("admin@raoni.com");
                 usuario.setPassword("$2a$10$AClqa6pS99KTaT2QpbYdvuVP1yf3QOSBeHvzdjaphp5A3GY91yvEO");
                 usuario.setUsername("admin");
-                Role prf = new Role();
+                RoleDTO prf = new RoleDTO();
                 prf.setName("ROLE_ADMIN");
                 prf.setId(1L);
                 usuario.getRoles().add(prf);
@@ -112,8 +114,8 @@ class UserControllerTest {
             usuario = usuarioService.getUserByUsername("admin");
             if (usuario != null) {
                 LOGGER.info(usuario.toString());
-                List<Role> perfis = usuario.getRoles();
-                for (Role perfil: perfis) {
+                List<RoleDTO> perfis = usuario.getRoles();
+                for (RoleDTO perfil: perfis) {
                     LOGGER.info(perfil.toString());
                 }
             }
