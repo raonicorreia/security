@@ -5,6 +5,7 @@ import br.com.raospower.app.exceptions.UserNotFoundException;
 import br.com.raospower.app.exceptions.UserNotInformedException;
 import br.com.raospower.app.repositorys.UserRepository;
 import br.com.raospower.app.repositorys.models.User;
+import br.com.raospower.app.services.dto.UserDTO;
 import br.com.raospower.app.specification.UserSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -20,7 +22,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public void create(User user) throws UserNotInformedException, UserAlreadyExistsException {
+    public void create(UserDTO user) throws UserNotInformedException, UserAlreadyExistsException {
         if (user == null) {
             throw new UserNotInformedException("Usuário não informado.");
         }
@@ -28,49 +30,50 @@ public class UserService {
         if (userRep != null) {
             throw new UserAlreadyExistsException("Usuário já cadastrado.");
         }
-        userRepository.save(user);
+        userRepository.save(user.convertUser());
     }
 
-    public void update(User user) throws UserNotInformedException, UserNotFoundException {
+    public void update(UserDTO user) throws UserNotInformedException, UserNotFoundException {
         if (user == null) {
             throw new UserNotInformedException("Usuário não informado.");
         }
         // verificando existencia do usuário.
         this.getUserByID(user.getId());
-        userRepository.save(user);
+        userRepository.save(user.convertUser());
     }
 
     public void remove(long id) throws UserNotFoundException {
-        Optional<User>  user = userRepository.findById(id);
+        Optional<User> user = userRepository.findById(id);
         if (!user.isPresent()) {
             throw new UserNotFoundException("Usuário não localizado.");
         } else {
-            remove(user.get());
+            remove(user.get().convertToDTO());
         }
     }
 
-    public void remove(User user) {
-        userRepository.delete(user);
+    public void remove(UserDTO user) {
+        userRepository.delete(user.convertUser());
     }
 
-    public User getUserByID(Long id) throws UserNotFoundException {
+    public UserDTO getUserByID(Long id) throws UserNotFoundException {
         Optional<User> user = userRepository.findById(id);
         if (!user.isPresent()) {
             throw new UserNotFoundException("Usuário inexistente");
         }
-        return user.get();
+        return user.get().convertToDTO();
     }
 
-    public User getUserByUsername(String user) throws UserNotFoundException {
+    public UserDTO getUserByUsername(String user) throws UserNotFoundException {
         User userRep = userRepository.findByUsername(user);
         if (userRep == null) {
             throw new UserNotFoundException("Usuário inexistente");
         }
-        return userRep;
+        return userRep.convertToDTO();
     }
 
-    public List<User> getUsers(UserSpecification userSpecification) {
-        return userRepository.findAll(userSpecification);
+    public List<UserDTO> getUsers(UserSpecification userSpecification) {
+        List<User> user = userRepository.findAll(userSpecification);
+        return (user != null) ? user.stream().map(User::convertToDTO).collect(Collectors.toList()) : null;
     }
 
 }

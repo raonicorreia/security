@@ -1,6 +1,7 @@
 package br.com.raospower.app.repositorys.models;
 
-import br.com.raospower.app.controllers.dto.UserDTO;
+import br.com.raospower.app.services.dto.RoleDTO;
+import br.com.raospower.app.services.dto.UserDTO;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "TB_USR_USER")
-public class User implements Serializable, ConverterDto<UserDTO> {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "SQ_USER")
@@ -81,8 +82,19 @@ public class User implements Serializable, ConverterDto<UserDTO> {
         this.roles = roles;
     }
 
-    @Override
-    public UserDTO convertToDto() {
-        return null;
+    public UserDTO convertToDTO() {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setEmail(this.email);
+        userDTO.setUsername(this.username);
+        userDTO.setId(this.id);
+        userDTO.setName(this.name);
+        userDTO.setPassword(this.password);
+        if (this.roles != null && !this.roles.isEmpty()) {
+            for (Role role: roles) {
+                userDTO.getRoles().add(new RoleDTO(role));
+            }
+        }
+        return userDTO;
     }
+
 }
