@@ -137,5 +137,3 @@ http://localhost:8080/swagger-ui.html
 # Fim
 
 [![](https://img.shields.io/badge/Linkedin-raonicorreia-blue.svg?&logo=linkedin)](https://www.linkedin.com/in/raonicorreia/)
-
-teste
