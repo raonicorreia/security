@@ -19,6 +19,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -47,7 +50,7 @@ public class SecurityConfig extends GlobalMethodSecurityConfiguration {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.cors().and()
+            http.cors().configurationSource(corsConfigurationSource()).and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                     .csrf().disable()
@@ -60,6 +63,13 @@ public class SecurityConfig extends GlobalMethodSecurityConfiguration {
                         .antMatchers( "/login/**").permitAll()
                         .antMatchers( "/**.html", "/v2/api-docs", "/webjars/**", "/configuration/**", "/swagger-resources/**").permitAll()
                         .anyRequest().authenticated();
+        }
+
+        @Bean
+        CorsConfigurationSource corsConfigurationSource() {
+            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+            source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+            return source;
         }
 
         @Override
