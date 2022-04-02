@@ -33,12 +33,6 @@ public class UserController extends BaseController {
         return userService.getUserByID(id);
     }
 
-    @GetMapping(value = "/{username}")
-    @PreAuthorize("hasPermission({#username}, 'v1/users/{username}', 'GET')")
-    public UserDTO getUserByUsername(@PathVariable("username") String username) throws UserNotFoundException {
-        return userService.getUserByUsername(username);
-    }
-
     @PostMapping
     @PreAuthorize("hasPermission('v1/users', 'POST')")
     public void create(@RequestBody UserDTO user) throws UserNotInformedException, UserAlreadyExistsException {
