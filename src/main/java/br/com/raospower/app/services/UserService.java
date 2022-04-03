@@ -8,6 +8,7 @@ import br.com.raospower.app.repositorys.models.User;
 import br.com.raospower.app.services.dto.UserDTO;
 import br.com.raospower.app.specification.UserSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,9 @@ public class UserService {
         if (userRep != null) {
             throw new UserAlreadyExistsException("Usuário já cadastrado.");
         }
+        // TODO a senha precisa chegar aqui criptografada.
+        String encrypt = new BCryptPasswordEncoder().encode(user.getPassword());
+        user.setPassword(encrypt);
         userRepository.save(user.convertUser());
     }
 
@@ -72,7 +76,12 @@ public class UserService {
     }
 
     public List<UserDTO> getUsers(UserSpecification userSpecification) {
-        List<User> user = userRepository.findAll(userSpecification);
+        List<User> user = null;
+        if (userSpecification != null) {
+            user = userRepository.findAll(userSpecification);
+        } else {
+            user = userRepository.findAll();
+        }
         return (user != null) ? user.stream().map(User::convertToDTO).collect(Collectors.toList()) : null;
     }
 
