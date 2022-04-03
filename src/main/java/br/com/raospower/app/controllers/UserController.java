@@ -19,6 +19,12 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("/all")
+    @PreAuthorize("hasPermission('v1/users', 'GET')")
+    public List<UserDTO> getAllUsers() {
+        return userService.getUsers(null);
+    }
+
     @GetMapping
     @PreAuthorize("hasPermission('v1/users', 'GET')")
     public List<UserDTO> getUsers(@RequestBody UserDTO user) {
@@ -41,6 +47,7 @@ public class UserController extends BaseController {
 
     @PutMapping
     @PreAuthorize("hasPermission('v1/users', 'PUT')")
+    @CrossOrigin(origins = "http://localhost")
     public void update(@RequestBody UserDTO user) throws UserNotInformedException, UserNotFoundException {
         userService.update(user);
     }

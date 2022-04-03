@@ -23,6 +23,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends GlobalMethodSecurityConfiguration {
@@ -50,10 +52,9 @@ public class SecurityConfig extends GlobalMethodSecurityConfiguration {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.cors().configurationSource(corsConfigurationSource()).and()
+            http.cors().configurationSource(corsConfigurationSource()).and().csrf().disable()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
-                    .csrf().disable()
                     .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                     .addFilter(new JWTValidateTokenFilter(authenticationManager(), customUserDetailsService))
                     .exceptionHandling()
@@ -68,7 +69,10 @@ public class SecurityConfig extends GlobalMethodSecurityConfiguration {
         @Bean
         CorsConfigurationSource corsConfigurationSource() {
             UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-            source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+            CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+            corsConfiguration.setAllowedMethods(Arrays.asList("*"));
+            corsConfiguration.setAllowedOriginPatterns(Arrays.asList("*"));
+            source.registerCorsConfiguration("/**", corsConfiguration);
             return source;
         }
 
