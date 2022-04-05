@@ -43,6 +43,8 @@ public class UserService {
         }
         // verificando existencia do usuário.
         this.getUserByID(user.getId());
+        String encrypt = new BCryptPasswordEncoder().encode(user.getPassword());
+        user.setPassword(encrypt);
         userRepository.save(user.convertUser());
     }
 
@@ -76,7 +78,7 @@ public class UserService {
     }
 
     public List<UserDTO> getUsers(UserSpecification userSpecification) {
-        List<User> user = null;
+        List<User> user;
         if (userSpecification != null) {
             user = userRepository.findAll(userSpecification);
         } else {

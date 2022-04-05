@@ -6,7 +6,6 @@ import br.com.raospower.app.services.RolePermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -37,6 +36,7 @@ public class SecurityPermissionEvaluator implements PermissionEvaluator {
             List<String> list = user.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toList());
+            if (list == null || list.isEmpty()) return false;
             RolePermission permission = this.rolePermissionService.findByRolePermission(list, operation, method);
             return permission != null;
         }

@@ -1,8 +1,6 @@
 package br.com.raospower.app.exceptions.base;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -14,8 +12,6 @@ import java.util.Date;
 
 @ControllerAdvice
 public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
-
-    protected final Log logger = LogFactory.getLog(this.getClass());
 
     @ExceptionHandler(TokenExpiredException.class)
     public ResponseEntity<ErrorResponse> handler(TokenExpiredException exception) {

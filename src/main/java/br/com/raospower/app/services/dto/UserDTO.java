@@ -3,10 +3,11 @@ package br.com.raospower.app.services.dto;
 import br.com.raospower.app.repositorys.models.Role;
 import br.com.raospower.app.repositorys.models.User;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDTO {
+public class UserDTO implements Serializable {
 
     private Long id;
 

@@ -1,6 +1,5 @@
 package br.com.raospower.app;
 
-import br.com.raospower.app.security.cryption.AesCryption;
 import br.com.raospower.app.security.cryption.CryptionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,14 +31,4 @@ class EncryptTest {
         assertTrue(encoder.matches(textPlain, result));
     }
 
-
-    @Test
-    @DisplayName("Teste criptografia AesCryption")
-    void encrypt2() throws CryptionException {
-        String textPlain = "123456";
-        String senhaCrypt = AesCryption.getInstance().encrypt(textPlain);
-        LOGGER.info("AesCryption: " + senhaCrypt);
-        String senha = AesCryption.getInstance().decrypt(senhaCrypt);
-        assertEquals(textPlain, senha);
-    }
 }
