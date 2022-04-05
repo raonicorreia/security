@@ -64,6 +64,7 @@ public class JWTValidateTokenFilter extends BasicAuthenticationFilter {
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
             return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         } catch (JWTVerificationException | IllegalArgumentException e) {
+            logger.error("Falha validando token", e);
             throw e;
         }
     }

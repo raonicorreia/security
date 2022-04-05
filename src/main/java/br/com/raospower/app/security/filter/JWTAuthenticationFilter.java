@@ -1,7 +1,7 @@
 package br.com.raospower.app.security.filter;
 
 import br.com.raospower.app.exceptions.base.ExceptionUtil;
-import br.com.raospower.app.security.cryption.AesCryption;
+import br.com.raospower.app.security.cryption.AesCryptic;
 import br.com.raospower.app.security.custom.CustomUserDetails;
 import br.com.raospower.app.security.models.TokenResponse;
 import br.com.raospower.app.security.models.UserCredentials;
@@ -29,7 +29,7 @@ import java.util.Date;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    public static final int TOKEN_EXPIRATION = 1_600_000;
+    public static final int TOKEN_EXPIRATION = Integer.parseInt(SecurityAppContext.getBean(Environment .class).getProperty(PropertiesKeys.JWT_TOKEN_EXPIRATION, "3600000"));
 
     public static final String KEY_SECRET = SecurityAppContext.getBean(Environment .class).getProperty(PropertiesKeys.JWT_SECRET_KEY);
 
@@ -46,7 +46,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             String pass = null;
             if (credentials.getPassword() != null && !credentials.getPassword().isEmpty()) {
                 try {
-                    pass = AesCryption.getInstance().decrypt(credentials.getPassword());
+                    pass = AesCryptic.getInstance().decrypt(credentials.getPassword());
                 } catch (Exception e) {
                     throw new BadCredentialsException("Criptografia da senha inválida.", e);
                 }
