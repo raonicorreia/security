@@ -45,13 +45,15 @@ spring.jpa.hibernate.ddl-auto=none
 
 ```properties
 # Propriedade para definir o tempo de expiracao do Token
-raospower.security.token.expiration=1600000
+raospower.security.token.expiration=3600000
 # Chave a ser utilizada para assinar o token
 raospower.security.key.secret=cff37da8-88ce-4ce3-a4c9-4e7f3aee5605
 # Tipo de criptografia a ser utilizada para senha durante as autenticacoes
 raospower.security.cryption.algorithm=AES
 # Chave da criptografia
-raospower.security.cryption.key=97C5526BABCE8F67221D10F305624438
+raospower.security.cryption.key=br.com.raospower
+# Vetor de inicializacao (IV)
+raospower.security.cryption.iv=0000000000000000
 
 # Adicionado devido a falha ao gerar swagger
 spring.mvc.pathmatch.matching-strategy=ant-path-matcher
